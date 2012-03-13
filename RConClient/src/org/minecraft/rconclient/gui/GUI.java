@@ -248,16 +248,46 @@ public class GUI implements Runnable {
 		userList.setVisibleRowCount(10);
 
 		final JPopupMenu popupMenu = new JPopupMenu();
-		popupMenu.add(new JMenuItem("Ban"));
-		popupMenu.add(new JMenuItem("Op"));
-		popupMenu.add(new JMenuItem("de-Op"));
-		popupMenu.add(new JMenuItem("Game mode"));
-		popupMenu.add(new JMenuItem("Give"));
-		popupMenu.add(new JMenuItem("Kick"));
-		popupMenu.add(new JMenuItem("Tell"));
-		popupMenu.add(new JMenuItem("Teleport"));
-		popupMenu.add(new JMenuItem("Whitelist"));
-		popupMenu.add(new JMenuItem("XP"));
+		final JMenuItem banItem = new JMenuItem();
+		final Action banAction = new BanAction(globals, userList);
+		banItem.setAction(banAction);
+		popupMenu.add(banItem);
+		final JMenuItem opItem = new JMenuItem();
+		final Action opAction = new OpAction(globals, userList);
+		opItem.setAction(opAction);
+		popupMenu.add(opItem);
+		final JMenuItem deOpItem = new JMenuItem();
+		final Action deOpAction = new DeOpAction(globals, userList);
+		deOpItem.setAction(deOpAction);
+		popupMenu.add(deOpItem);
+		final JMenuItem gameModeItem = new JMenuItem();
+		final Action gameModeAction = new GameModeAction(globals, userList);
+		gameModeItem.setAction(gameModeAction);
+		popupMenu.add(gameModeItem);
+		final JMenuItem giveItem = new JMenuItem();
+		final Action giveAction = new GiveAction(globals, userList);
+		giveItem.setAction(giveAction);
+		popupMenu.add(giveItem);
+		final JMenuItem kickItem = new JMenuItem();
+		final Action kickAction = new KickAction(globals, userList);
+		kickItem.setAction(kickAction);
+		popupMenu.add(kickItem);
+		final JMenuItem tellItem = new JMenuItem();
+		final Action tellAction = new TellAction(globals, userList);
+		tellItem.setAction(tellAction);
+		popupMenu.add(tellItem);
+		final JMenuItem teleportItem = new JMenuItem();
+		final Action teleportAction = new TeleportAction(globals, userList);
+		teleportItem.setAction(teleportAction);
+		popupMenu.add(teleportItem);
+		final JMenuItem whitelistItem = new JMenuItem();
+		final Action whitelistAction = new WhitelistAction(globals, userList);
+		whitelistItem.setAction(whitelistAction);
+		popupMenu.add(whitelistItem);
+		final JMenuItem xpItem = new JMenuItem();
+		final Action xpAction = new XPAction(globals, userList);
+		xpItem.setAction(xpAction);
+		popupMenu.add(xpItem);
 		userList.addMouseListener(new PopupMenuListener(popupMenu));
 
 		final JScrollPane scrollPane = new JScrollPane(userList);
@@ -280,7 +310,10 @@ public class GUI implements Runnable {
 		whiteList.setVisibleRowCount(10);
 
 		final JPopupMenu popupMenu = new JPopupMenu();
-		popupMenu.add(new JMenuItem("Remove"));
+		final JMenuItem removeItem = new JMenuItem();
+		final Action removeAction = new RemoveAction(globals, whiteList);
+		removeItem.setAction(removeAction);
+		popupMenu.add(removeItem);
 		whiteList.addMouseListener(new PopupMenuListener(popupMenu));
 
 		final JScrollPane scrollPane = new JScrollPane(whiteList);
