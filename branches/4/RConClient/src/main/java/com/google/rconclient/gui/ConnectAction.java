@@ -7,13 +7,10 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-
-import com.google.namedlogger.NamedLogger;
 
 import com.google.rconclient.rcon.AuthenticationException;
 import com.google.rconclient.rcon.RCon;
@@ -30,11 +27,6 @@ public class ConnectAction extends AbstractAction {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * The logger for this class.
-	 */
-	private static final NamedLogger LOGGER = new NamedLogger();
 
 	/**
 	 * The resource bundle of the messages.
@@ -62,19 +54,13 @@ public class ConnectAction extends AbstractAction {
 	 */
 	public ConnectAction(final Globals globals) {
 		super();
-		LOGGER.entering(globals);
-
 		this.globals = globals;
 		putValue(NAME, MESSAGES.getString(MSG_NAME));
 		putValue(MNEMONIC_KEY, KeyEventUtil.getKeyCode(MESSAGES.getString(MSG_MNEMONIC)));
-
-		LOGGER.exiting();
 	}
 
 	@Override
 	public void actionPerformed(final ActionEvent event) {
-		LOGGER.entering(event);
-
 		final ConnectionDialog dialog = new ConnectionDialog((JComponent) event.getSource());
 		final int selectedValue = dialog.getOption();
 		switch (selectedValue) {
@@ -95,14 +81,12 @@ public class ConnectAction extends AbstractAction {
 				if (password != null) {
 					Arrays.fill(password, 'x');
 				}
-				LOGGER.log(Level.WARNING, "Closing/Opening a connection", e);
 				JOptionPane.showMessageDialog((JComponent) event.getSource(), MESSAGES.getString(MSG_IOEXCEPTION_MESSAGE),
 						MESSAGES.getString(MSG_IOEXCEPTION_TITLE), JOptionPane.ERROR_MESSAGE);
 			} catch (final AuthenticationException e) {
 				if (password != null) {
 					Arrays.fill(password, 'x');
 				}
-				LOGGER.log(Level.WARNING, "Closing/Opening a connection", e);
 				JOptionPane.showMessageDialog((JComponent) event.getSource(), MESSAGES.getString(MSG_AUTH_EXCEPTION_MESSAGE),
 						MESSAGES.getString(MSG_AUTH_EXCEPTION_TITLE), JOptionPane.ERROR_MESSAGE);
 			}
@@ -116,7 +100,5 @@ public class ConnectAction extends AbstractAction {
 			assert false : selectedValue;
 			break;
 		}
-
-		LOGGER.exiting();
 	}
 }

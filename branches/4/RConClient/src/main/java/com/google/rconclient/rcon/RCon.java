@@ -11,9 +11,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
-import java.util.logging.Level;
-
-import com.google.namedlogger.NamedLogger;
 
 /**
  * This class implements the communication with MineCraft using the RCon
@@ -22,11 +19,6 @@ import com.google.namedlogger.NamedLogger;
  * @author vincent
  */
 public class RCon {
-
-	/**
-	 * The logger for this class.
-	 */
-	private static final NamedLogger LOGGER = new NamedLogger();
 
 	/**
 	 * The value of a command packet type.
@@ -82,8 +74,6 @@ public class RCon {
 	 */
 	public RCon(final String host, final int port, final char[] password) throws IOException, AuthenticationException {
 		super();
-		LOGGER.entering(host, port, password);
-
 		final Random random = new Random();
 		requestId = random.nextInt();
 		socket = new Socket(host, port);
@@ -98,8 +88,6 @@ public class RCon {
 			passwordBytes[i] = 0;
 		}
 		assert response.length == 0;
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -116,15 +104,11 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void ban(final String player) throws IOException, AuthenticationException {
-		LOGGER.entering(player);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("ban");
 		sb.append(' ').append(player);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -139,15 +123,11 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void banIp(final String host) throws AuthenticationException, IOException {
-		LOGGER.entering(host);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("ban-ip");
 		sb.append(' ').append(host);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -160,8 +140,6 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public String[] banIPList() throws IOException, AuthenticationException {
-		LOGGER.entering();
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("banlist");
 		sb.append(' ').append("ips");
@@ -169,8 +147,6 @@ public class RCon {
 		final int colonPosition = response.indexOf(':');
 		final String ipResponse = response.substring(colonPosition + 1).trim();
 		final String[] ips = "".equals(ipResponse) ? new String[0] : ipResponse.split(",\\s+");
-
-		LOGGER.exiting(ips);
 		return ips;
 	}
 
@@ -184,16 +160,12 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public String[] banList() throws IOException, AuthenticationException {
-		LOGGER.entering();
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("banlist");
 		final String response = send(sb.toString());
 		final int colonPosition = response.indexOf(':');
 		final String userResponse = response.substring(colonPosition + 1).trim();
 		final String[] users = "".equals(userResponse) ? new String[0] : userResponse.split(",\\s+");
-
-		LOGGER.exiting(users);
 		return users;
 	}
 
@@ -205,16 +177,11 @@ public class RCon {
 	 *             Some sort of I/O exception occurred.
 	 */
 	public void close() throws IOException {
-		LOGGER.entering();
-
 		synchronized (syncObject) {
 			if (!socket.isClosed()) {
-				LOGGER.log(Level.FINE, "Closing the socket");
 				socket.close();
 			}
 		}
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -228,15 +195,11 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void deOp(final String player) throws AuthenticationException, IOException {
-		LOGGER.entering(player);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("deop");
 		sb.append(' ').append(player);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -256,15 +219,11 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void gameMode(final String player, final GameMode mode) throws AuthenticationException, IOException {
-		LOGGER.entering(player, mode);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("gamemode");
 		sb.append(' ').append(mode.getNumber());
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -280,11 +239,7 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void give(final String player, final int dataValue) throws AuthenticationException, IOException {
-		LOGGER.entering(player, dataValue);
-
 		give(player, dataValue, 1);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -302,11 +257,7 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void give(final String player, final int dataValue, final int amount) throws AuthenticationException, IOException {
-		LOGGER.entering(player, dataValue, amount);
-
 		give(player, dataValue, amount, 0);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -328,8 +279,6 @@ public class RCon {
 	 */
 	public void give(final String player, final int dataValue, final int amount, final int damage) throws AuthenticationException,
 			IOException {
-		LOGGER.entering(player, dataValue, amount, damage);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("give");
 		sb.append(' ').append(player);
@@ -338,8 +287,6 @@ public class RCon {
 		sb.append(' ').append(damage);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -353,15 +300,11 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void kick(final String player) throws AuthenticationException, IOException {
-		LOGGER.entering(player);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("kick");
 		sb.append(' ').append(player);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -374,16 +317,12 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public String[] list() throws IOException, AuthenticationException {
-		LOGGER.entering();
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("list");
 		final String response = send(sb.toString());
 		final int colonPosition = response.indexOf(':');
 		final String userResponse = response.substring(colonPosition + 1).trim();
 		final String[] users = "".equals(userResponse) ? new String[0] : userResponse.split(",\\s+");
-
-		LOGGER.exiting(users);
 		return users;
 	}
 
@@ -398,15 +337,11 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void op(final String player) throws AuthenticationException, IOException {
-		LOGGER.entering(player);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("op");
 		sb.append(' ').append(player);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -420,15 +355,11 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void pardon(final String player) throws AuthenticationException, IOException {
-		LOGGER.entering(player);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("pardon");
 		sb.append(' ').append(player);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -443,15 +374,11 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void pardonIp(final String host) throws AuthenticationException, IOException {
-		LOGGER.entering(host);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("pardon-ip");
 		sb.append(' ').append(host);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -463,14 +390,10 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void saveAll() throws AuthenticationException, IOException {
-		LOGGER.entering();
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("save-all");
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -483,14 +406,10 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void saveOff() throws AuthenticationException, IOException {
-		LOGGER.entering();
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("save-off");
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -503,14 +422,10 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void saveOn() throws AuthenticationException, IOException {
-		LOGGER.entering();
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("save-on");
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -524,15 +439,11 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void say(final String message) throws AuthenticationException, IOException {
-		LOGGER.entering(message);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("say");
 		sb.append(' ').append(message);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -544,14 +455,10 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void stop() throws AuthenticationException, IOException {
-		LOGGER.entering();
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("stop");
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -568,16 +475,12 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void tell(final String player, final String message) throws AuthenticationException, IOException {
-		LOGGER.entering(player, message);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("tell");
 		sb.append(' ').append(player);
 		sb.append(' ').append(message);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -594,16 +497,12 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void timeAdd(final int amount) throws AuthenticationException, IOException {
-		LOGGER.entering(amount);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("time");
 		sb.append(' ').append("add");
 		sb.append(' ').append(amount);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -619,16 +518,12 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void timeSet(final int time) throws AuthenticationException, IOException {
-		LOGGER.entering(time);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("time");
 		sb.append(' ').append("set");
 		sb.append(' ').append(time);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -640,14 +535,10 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void toggleDownfall() throws AuthenticationException, IOException {
-		LOGGER.entering();
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("toggledownfall");
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	@Override
@@ -674,16 +565,12 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void tp(final String player, final String targetPlayer) throws AuthenticationException, IOException {
-		LOGGER.entering(player, targetPlayer);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("tp");
 		sb.append(' ').append(player);
 		sb.append(' ').append(targetPlayer);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -696,8 +583,6 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public String[] whitelist() throws IOException, AuthenticationException {
-		LOGGER.entering();
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("whitelist");
 		sb.append(' ').append("list");
@@ -705,8 +590,6 @@ public class RCon {
 		final int colonPosition = response.indexOf(':');
 		final String userResponse = response.substring(colonPosition + 1).trim();
 		final String[] users = "".equals(userResponse) ? new String[0] : userResponse.split(",?\\s+");
-
-		LOGGER.exiting(users);
 		return users;
 	}
 
@@ -721,16 +604,12 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void whitelistAdd(final String player) throws IOException, AuthenticationException {
-		LOGGER.entering(player);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("whitelist");
 		sb.append(' ').append("add");
 		sb.append(' ').append(player);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -745,15 +624,11 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void whitelistOff() throws IOException, AuthenticationException {
-		LOGGER.entering();
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("whitelist");
 		sb.append(' ').append("off");
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -768,15 +643,11 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void whitelistOn() throws IOException, AuthenticationException {
-		LOGGER.entering();
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("whitelist");
 		sb.append(' ').append("on");
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -789,15 +660,11 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void whitelistReload() throws IOException, AuthenticationException {
-		LOGGER.entering();
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("whitelist");
 		sb.append(' ').append("reload");
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -811,16 +678,12 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void whitelistRemove(final String player) throws IOException, AuthenticationException {
-		LOGGER.entering(player);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("whitelist");
 		sb.append(' ').append("remove");
 		sb.append(' ').append(player);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -838,16 +701,12 @@ public class RCon {
 	 *             The authentication using the password failed.
 	 */
 	public void xp(final String player, final int amount) throws AuthenticationException, IOException {
-		LOGGER.entering(player, amount);
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("xp");
 		sb.append(' ').append(player);
 		sb.append(' ').append(amount);
 		final String response = send(sb.toString());
 		assert "".equals(response);
-
-		LOGGER.exiting();
 	}
 
 	/**
@@ -866,8 +725,6 @@ public class RCon {
 	 *             The request id was not as expected.
 	 */
 	private byte[] send(final int type, final byte[] payload) throws IOException, IncorrectRequestIdException {
-		LOGGER.entering(type, payload);
-
 		final byte[] receivedPayload;
 		synchronized (syncObject) {
 			// Send the command.
@@ -880,14 +737,12 @@ public class RCon {
 			sendBuffer.putInt(type);
 			sendBuffer.put(payload);
 			sendBuffer.put((byte) 0).put((byte) 0);
-			LOGGER.log(Level.FINE, "Sending bytes {0}", sendBytes);
 			outputStream.write(sendBytes);
 			outputStream.flush();
 
 			// Receive the response.
 			final byte[] receivedBytes = new byte[2048];
 			final int receivedBytesLength = inputStream.read(receivedBytes);
-			LOGGER.log(Level.FINE, "Received length {0} and bytes {1}", receivedBytesLength, receivedBytes);
 			final ByteBuffer receivedBuffer = ByteBuffer.wrap(receivedBytes, 0, receivedBytesLength);
 			receivedBuffer.order(ByteOrder.LITTLE_ENDIAN);
 			final int receivedLength = receivedBuffer.getInt();
@@ -899,12 +754,9 @@ public class RCon {
 			receivedBuffer.get(new byte[2]);
 			if (receivedRequestId != requestId) {
 				final IncorrectRequestIdException exception = new IncorrectRequestIdException(receivedRequestId);
-				LOGGER.throwing(exception);
 				throw exception;
 			}
 		}
-
-		LOGGER.exiting(receivedPayload);
 		return receivedPayload;
 	}
 
@@ -924,12 +776,8 @@ public class RCon {
 	 *             The request id was not as expected.
 	 */
 	private String send(final int type, final String payload) throws IOException, IncorrectRequestIdException {
-		LOGGER.entering(type, payload);
-
 		final String responsePayload = new String(send(type, payload.getBytes(StandardCharsets.US_ASCII)),
 				StandardCharsets.US_ASCII);
-
-		LOGGER.exiting(responsePayload);
 		return responsePayload;
 	}
 
@@ -946,22 +794,14 @@ public class RCon {
 	 *             The request id was not as expected.
 	 */
 	private String send(final String payload) throws IOException, IncorrectRequestIdException {
-		LOGGER.entering(payload);
-
 		final String response = send(COMMAND_TYPE, payload);
-
-		LOGGER.exiting(response);
 		return response;
 	}
 
 	@Override
 	protected void finalize() throws Throwable {
-		LOGGER.entering();
-
 		close();
 		super.finalize();
-
-		LOGGER.exiting();
 	}
 
 }

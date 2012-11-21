@@ -8,8 +8,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 
-import com.google.namedlogger.NamedLogger;
-
 /**
  * The action to be used to quit the application.
  * 
@@ -22,11 +20,6 @@ public class QuitAction extends AbstractAction {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * The logger for this class.
-	 */
-	private static final NamedLogger LOGGER = new NamedLogger();
 
 	/**
 	 * The resource bundle of the messages.
@@ -42,21 +35,13 @@ public class QuitAction extends AbstractAction {
 	 */
 	public QuitAction() {
 		super();
-		LOGGER.entering();
-
 		putValue(NAME, MESSAGES.getString(MSG_NAME));
 		putValue(MNEMONIC_KEY, KeyEventUtil.getKeyCode(MESSAGES.getString(MSG_MNEMONIC)));
-
-		LOGGER.exiting();
 	}
 
 	@Override
 	public void actionPerformed(final ActionEvent event) {
-		LOGGER.entering(event);
-
 		System.exit(0);
-
-		LOGGER.exiting();
 	}
 
 }
