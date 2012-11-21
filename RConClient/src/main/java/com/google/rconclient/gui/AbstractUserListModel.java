@@ -9,14 +9,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
 
 import javax.swing.AbstractListModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
-
-import com.google.namedlogger.NamedLogger;
 
 import com.google.rconclient.rcon.AuthenticationException;
 import com.google.rconclient.rcon.RCon;
@@ -39,34 +36,25 @@ public abstract class AbstractUserListModel extends AbstractListModel<String> {
 
 		@Override
 		protected String[] doInBackground() throws Exception {
-			LOGGER.entering();
-
 			final RCon connection = globals.getConnection();
 			final String[] users = getList(connection);
-
-			LOGGER.exiting(users);
 			return users;
 		}
 
 		@Override
 		protected void done() {
-			LOGGER.entering();
 			super.done();
 
 			try {
 				final String[] users = get();
 				update(users);
 			} catch (final InterruptedException e) {
-				LOGGER.log(Level.WARNING, "The backgroung job was interrupted", e);
 				JOptionPane.showMessageDialog(globals.getFrame(), MESSAGES.getString(MSG_INTERRUPTED_MESSAGE),
 						MESSAGES.getString(MSG_INTERRUPTED_TITLE), JOptionPane.ERROR_MESSAGE);
 			} catch (final ExecutionException e) {
-				LOGGER.log(Level.WARNING, "The backgroung job got an unhandled exception", e);
 				JOptionPane.showMessageDialog(globals.getFrame(), MESSAGES.getString(MSG_EXCEPTION_MESSAGE),
 						MESSAGES.getString(MSG_EXCEPTION_TITLE), JOptionPane.ERROR_MESSAGE);
 			}
-
-			LOGGER.exiting();
 		}
 
 	}
@@ -82,12 +70,8 @@ public abstract class AbstractUserListModel extends AbstractListModel<String> {
 
 		@Override
 		public void actionPerformed(final ActionEvent event) {
-			LOGGER.entering(event);
-
 			final ListWorker listWorker = new ListWorker();
 			listWorker.execute();
-
-			LOGGER.exiting();
 		}
 
 	}
@@ -96,11 +80,6 @@ public abstract class AbstractUserListModel extends AbstractListModel<String> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * The logger for this class.
-	 */
-	private static final NamedLogger LOGGER = new NamedLogger();
 
 	/**
 	 * The resource bundle of the messages.
@@ -131,8 +110,6 @@ public abstract class AbstractUserListModel extends AbstractListModel<String> {
 	 */
 	public AbstractUserListModel(final Globals globals) {
 		super();
-		LOGGER.entering(globals);
-
 		this.globals = globals;
 		users = new String[0];
 		final Timer timer = new Timer(0, new TimerListener());
@@ -159,8 +136,6 @@ public abstract class AbstractUserListModel extends AbstractListModel<String> {
 				}
 			}
 		});
-
-		LOGGER.exiting();
 	}
 
 	@Override
@@ -181,14 +156,10 @@ public abstract class AbstractUserListModel extends AbstractListModel<String> {
 	 *            The new list of users.
 	 */
 	private void update(final String[] users) {
-		LOGGER.entering((Object[]) users);
-
 		// final String[] oldUsers = this.users;
 		Arrays.sort(users);
 		this.users = users;
 		fireContentsChanged(this, 0, getSize() - 1);
-
-		LOGGER.exiting();
 	}
 
 	protected abstract String[] getList(RCon connection) throws IOException, AuthenticationException;
