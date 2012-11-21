@@ -24,8 +24,6 @@ import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
-import com.google.namedlogger.NamedLogger;
-
 import com.google.rconclient.rcon.RCon;
 
 /**
@@ -40,8 +38,6 @@ public class GUI implements Runnable {
 
 		@Override
 		public void windowClosing(final WindowEvent event) {
-			LOGGER.entering(event);
-
 			RCon connection = globals.getConnection();
 			if (connection != null) {
 				try {
@@ -55,16 +51,9 @@ public class GUI implements Runnable {
 			}
 			super.windowClosing(event);
 			System.exit(0);
-
-			LOGGER.exiting();
 		}
 
 	}
-
-	/**
-	 * The logger for this class.
-	 */
-	private static final NamedLogger LOGGER = new NamedLogger();
 
 	/**
 	 * The resource bundle of the messages.
@@ -93,18 +82,12 @@ public class GUI implements Runnable {
 	 */
 	public GUI() {
 		super();
-		LOGGER.entering();
-
 		globals = new Globals();
 		SwingUtilities.invokeLater(this);
-
-		LOGGER.exiting();
 	}
 
 	@Override
 	public void run() {
-		LOGGER.entering();
-
 		final JFrame frame = new JFrame();
 		globals.setFrame(frame);
 		frame.setTitle(MESSAGES.getString(MSG_TITLE));
@@ -130,16 +113,12 @@ public class GUI implements Runnable {
 
 		frame.pack();
 		frame.setVisible(true);
-
-		LOGGER.exiting();
 	}
 
 	/**
 	 * @return
 	 */
 	private JComponent createBanIpList() {
-		LOGGER.entering();
-
 		final ListModel<String> listModel = new BanIpListModel(globals);
 		final JList<String> banIpList = new JList<>(listModel);
 		banIpList.setPrototypeCellValue(PROTOTYPE_CELL_VALUE);
@@ -156,7 +135,6 @@ public class GUI implements Runnable {
 		final Border border = BorderFactory.createTitledBorder(MESSAGES.getString(MSG_BAN_IP_LIST_TITLE));
 		scrollPane.setBorder(border);
 
-		LOGGER.exiting(scrollPane);
 		return scrollPane;
 	}
 
@@ -164,8 +142,6 @@ public class GUI implements Runnable {
 	 * @return
 	 */
 	private JComponent createBanList() {
-		LOGGER.entering();
-
 		final ListModel<String> listModel = new BanListModel(globals);
 		final JList<String> banList = new JList<>(listModel);
 		banList.setPrototypeCellValue(PROTOTYPE_CELL_VALUE);
@@ -182,7 +158,6 @@ public class GUI implements Runnable {
 		final Border border = BorderFactory.createTitledBorder(MESSAGES.getString(MSG_BAN_LIST_TITLE));
 		scrollPane.setBorder(border);
 
-		LOGGER.exiting(scrollPane);
 		return scrollPane;
 	}
 
@@ -192,8 +167,6 @@ public class GUI implements Runnable {
 	 * @return The menu bar.
 	 */
 	private JMenuBar createMenuBar() {
-		LOGGER.entering();
-
 		final JMenuBar menuBar = new JMenuBar();
 
 		final JMenu fileMenu = new JMenu();
@@ -232,7 +205,6 @@ public class GUI implements Runnable {
 
 		menuBar.add(serverMenu);
 
-		LOGGER.exiting(menuBar);
 		return menuBar;
 	}
 
@@ -240,8 +212,6 @@ public class GUI implements Runnable {
 	 * @return
 	 */
 	private JComponent createUserList() {
-		LOGGER.entering();
-
 		final ListModel<String> listModel = new UserListModel(globals);
 		final JList<String> userList = new JList<>(listModel);
 		userList.setPrototypeCellValue(PROTOTYPE_CELL_VALUE);
@@ -294,7 +264,6 @@ public class GUI implements Runnable {
 		final Border border = BorderFactory.createTitledBorder(MESSAGES.getString(MSG_USER_LIST_TITLE));
 		scrollPane.setBorder(border);
 
-		LOGGER.exiting(scrollPane);
 		return scrollPane;
 	}
 
@@ -302,8 +271,6 @@ public class GUI implements Runnable {
 	 * @return
 	 */
 	private JComponent createWhiteList() {
-		LOGGER.entering();
-
 		final ListModel<String> listModel = new WhiteListModel(globals);
 		final JList<String> whiteList = new JList<>(listModel);
 		whiteList.setPrototypeCellValue(PROTOTYPE_CELL_VALUE);
@@ -320,7 +287,6 @@ public class GUI implements Runnable {
 		final Border border = BorderFactory.createTitledBorder(MESSAGES.getString(MSG_WHITE_LIST_TITLE));
 		scrollPane.setBorder(border);
 
-		LOGGER.exiting(scrollPane);
 		return scrollPane;
 	}
 

@@ -3,8 +3,6 @@
  */
 package com.google.rconclient;
 
-import com.google.namedlogger.NamedLogger;
-
 import com.google.rconclient.gui.GUI;
 
 /**
@@ -27,20 +25,13 @@ import com.google.rconclient.gui.GUI;
 public class RConClient {
 
 	/**
-	 * The logger for this class.
-	 */
-	private static final NamedLogger LOGGER = new NamedLogger();
-
-	/**
 	 * The main method which is called at program start.
 	 * 
 	 * @param args
 	 *            The command line arguments.
 	 */
 	public static void main(final String[] args) {
-		LOGGER.entering((Object[]) args);
 		new GUI();
-		LOGGER.exiting();
 	}
 
 }

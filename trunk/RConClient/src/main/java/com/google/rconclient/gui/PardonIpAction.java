@@ -11,8 +11,6 @@ import java.util.ResourceBundle;
 import javax.swing.AbstractAction;
 import javax.swing.JList;
 
-import com.google.namedlogger.NamedLogger;
-
 import com.google.rconclient.rcon.AuthenticationException;
 import com.google.rconclient.rcon.RCon;
 
@@ -27,11 +25,6 @@ public class PardonIpAction extends AbstractAction {
 	 * The serial version id.
 	 */
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * The logger for this class.
-	 */
-	private static final NamedLogger LOGGER = new NamedLogger();
 
 	/**
 	 * The resource bundle of the messages.
@@ -62,21 +55,15 @@ public class PardonIpAction extends AbstractAction {
 	 */
 	public PardonIpAction(final Globals globals, final JList<String> list) {
 		super();
-		LOGGER.entering(globals, list);
-
 		this.globals = globals;
 		this.list = list;
 
 		putValue(NAME, MESSAGES.getString(MSG_NAME));
 		putValue(MNEMONIC_KEY, KeyEventUtil.getKeyCode(MESSAGES.getString(MSG_MNEMONIC)));
-
-		LOGGER.exiting();
 	}
 
 	@Override
 	public void actionPerformed(final ActionEvent event) {
-		LOGGER.entering(event);
-
 		final RCon connection = globals.getConnection();
 		final List<String> selectedIPs = list.getSelectedValuesList();
 		list.clearSelection();
@@ -90,8 +77,6 @@ public class PardonIpAction extends AbstractAction {
 		} catch (AuthenticationException | IOException e) {
 			globals.setConnection(null);
 		}
-
-		LOGGER.exiting();
 	}
 
 }

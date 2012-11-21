@@ -11,8 +11,7 @@ package com.google.rconclient.rcon;
  */
 public enum GameMode {
 
-	Survival(0),
-	Creative(1);
+	Survival(0), Creative(1);
 
 	/**
 	 * The internal number of this mode.
